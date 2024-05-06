@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TETRIS</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="./node_modules/howler/src/howler.core.js"></script>
+</head>
+<body>
+    <div id="game">
+
+        <div id="info-wrapper">
+            LEVEL <span id="level">0</span>
+        </div>
+
+        <div id="canvas-wrapper">
+            <canvas id="tetris" width="400" height="800"></canvas>
+            <div id="game-info-wrapper">
+                Next Piece: <span id="next-piece"></span>
+                <br>
+                Holding: <span id="holding-piece"></span>
+            </div>
+        </div>
+
+
+        <div id="info-wrapper">
+            SCORE: <span id="score">0</span>
+        </div>
+
+    </div>
+
+    <script src="./script.js"></script>
+</body>
+</html>
