@@ -388,12 +388,18 @@ class Piece {
             this.unDraw()
             updatePieceSequence()
         } else if (!hasHolded) {
+            let betweenPiece = holdingPiece
+
+            holdingPiece = pieceSequence[0]
+            
+            pieceSequence.shift()
+
+            pieceSequence.unshift(betweenPiece)
+            pieceSequence.unshift(betweenPiece)
+
             hasHolded = true
             this.unDraw()
-            pieceSequence.unshift(holdingPiece)
-            pieceSequence.unshift(holdingPiece)
-            holdingPiece = null
-            holdingPieceElement.innerText = ''
+
             updatePieceSequence()
         }
     }
@@ -416,6 +422,8 @@ function updatePieceSequence() {
     } 
     activePiece = new Piece(pieceSequence[0][0], pieceSequence[0][1])
     
+    console.log(...pieceSequence)
+
     nextPieceElement.innerText = pieceSequence[1][2]
     nextPieceElement.style.color = pieceSequence[1][1]
     
