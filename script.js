@@ -1,3 +1,5 @@
+(function ()  {
+
 const gameStorage = window.localStorage
 
 const canvas = document.getElementById("tetris")
@@ -469,4 +471,17 @@ function control(event) {
         if (event.keyCode === 16) {
             activePiece.hold()
         }
-    }
+
+        if (event.keyCode === 75) {
+                skipLevel()
+            }
+        }
+    
+function skipLevel() {
+    GAME_SPEED += 50
+    score += (40 * 10 * (Number(levelElement.textContent) + 1))
+    levelElement.textContent = Math.floor(GAME_SPEED / 50)
+    scoreElement.textContent = score
+}
+
+})()
