@@ -15,7 +15,7 @@ const EMPTY = '#111'
 
 let GAME_SPEED = 0
 let score = 0
-let highscore = gameStorage.getItem("highscore")
+let highscore = Number(gameStorage.getItem("highscore"))
 
 let GAME_OVER = false
 
@@ -274,11 +274,11 @@ class Piece {
                 }
 
                 if (this.y + r < 0) {
-                    if (!GAME_OVER) {alert(`You got ${score} points \nYour highscore is ${highscore} points`)}
-                    GAME_OVER = true
                     if (score > highscore) {
                         gameStorage.setItem("highscore", score.toString())
                     }
+                    if (!GAME_OVER) {alert(`You got ${score} points \nYour highscore is ${highscore} points`)}
+                    GAME_OVER = true
                 }
 
                 board[this.y+r][this.x+c] = this.color
@@ -307,16 +307,15 @@ class Piece {
                 consectutiveRows++
 
                 GAME_SPEED += 5
-                console.log(GAME_SPEED)
             }
         }
-        if (consectutiveRows === 1) {score += 100}
-        if (consectutiveRows === 2) {score += 300}
-        if (consectutiveRows === 3) {score += 500}
-        if (consectutiveRows === 4) {score += 800}
+        if (consectutiveRows === 1) {score += 40 * (Number(levelElement.textContent) + 1)}
+        if (consectutiveRows === 2) {score += 100 * (Number(levelElement.textContent) + 1)}
+        if (consectutiveRows === 3) {score += 300 * (Number(levelElement.textContent) + 1)}
+        if (consectutiveRows === 4) {score += 1200 * (Number(levelElement.textContent) + 1)}
 
         scoreElement.textContent = score
-        levelElement.textContent = Math.floor(GAME_SPEED / 25)
+        levelElement.textContent = Math.floor(GAME_SPEED / 50)
         drawBoard()
 
         hasHolded = false
@@ -422,8 +421,6 @@ function updatePieceSequence() {
     } 
     activePiece = new Piece(pieceSequence[0][0], pieceSequence[0][1])
     
-    console.log(...pieceSequence)
-
     nextPieceElement.innerText = pieceSequence[1][2]
     nextPieceElement.style.color = pieceSequence[1][1]
     
@@ -438,7 +435,7 @@ function generateRandomPieceSequence() {
 }
 
 const fallingPieces = () => {
-    let delay = 1000 - GAME_SPEED
+    let delay = GAME_SPEED < 975 ? 1000 - GAME_SPEED : 25
     activePiece.moveDown()
     setTimeout(fallingPieces, delay)
 }
