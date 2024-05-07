@@ -307,6 +307,7 @@ class Piece {
                 consectutiveRows++
 
                 GAME_SPEED += 5
+                console.log(GAME_SPEED)
             }
         }
         if (consectutiveRows === 1) {score += 100}
@@ -428,11 +429,13 @@ function generateRandomPieceSequence() {
     return PIECES.sort(() => Math.random() - 0.5)
 }
 
-const fallingPieces = setInterval(() => activePiece.moveDown(), 1000 - GAME_SPEED )
-
-if (GAME_OVER) {
-    clearInterval(fallingPieces)
+const fallingPieces = () => {
+    let delay = 1000 - GAME_SPEED
+    activePiece.moveDown()
+    setTimeout(fallingPieces, delay)
 }
+
+setTimeout(fallingPieces, 1000)
 
 document.addEventListener("keydown", control)
 
