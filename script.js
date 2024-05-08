@@ -278,6 +278,7 @@ class Piece {
                 if (this.y + r < 0) {
                     if (score > highscore) {
                         gameStorage.setItem("highscore", score.toString())
+                        highscore = Number(gameStorage.getItem("highscore"))
                     }
                     if (!GAME_OVER) {alert(`You got ${score} points \nYour highscore is ${highscore} points`)}
                     GAME_OVER = true
