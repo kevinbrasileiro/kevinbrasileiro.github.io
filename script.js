@@ -452,15 +452,27 @@ function control(event) {
             return
         }
 
+        if (event.keyCode === 37) {
+            activePiece.moveLeft()
+        } 
+
         if (event.keyCode === 65) {
             activePiece.moveLeft()
-        } else if (event.keyCode === 68) {
+        } 
+
+        if (event.keyCode === 39) {
+            activePiece.moveRight()
+        }  
+        
+        if (event.keyCode === 68) {
             activePiece.moveRight()
         }     
 
-        if (event.keyCode === 87) {
+        if (event.keyCode === 87 || event.keyCode === 38) {
             activePiece.rotate()
-        } else if (event.keyCode === 83) {
+        } 
+        
+        if (event.keyCode === 83 || event.keyCode === 40 ) {
             activePiece.moveDown()
             score += 1
         }
@@ -469,7 +481,7 @@ function control(event) {
             activePiece.drop()
         }
 
-        if (event.keyCode === 16) {
+        if (event.keyCode === 16 || event.keyCode === 67) {
             activePiece.hold()
         }
 
