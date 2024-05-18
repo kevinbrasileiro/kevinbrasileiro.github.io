@@ -324,8 +324,6 @@ class Piece {
             linesClearedInLevel -= 10
         }
 
-        console.log(linesClearedInLevel, GAME_LEVEL, GAME_SPEED)
-
         scoreElement.textContent = GAME_SCORE
         levelElement.textContent = GAME_LEVEL
         drawBoard()
@@ -447,7 +445,7 @@ function generateRandomPieceSequence() {
 }
 
 const fallingPieces = () => {
-    let delay = GAME_SPEED < 900 ? 920 - GAME_SPEED : 25
+    let delay = GAME_SPEED < 900 ? 920 - GAME_SPEED : 20
     activePiece.moveDown()
     setTimeout(fallingPieces, delay)
 }
