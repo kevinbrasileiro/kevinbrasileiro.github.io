@@ -16,7 +16,9 @@ const COLUMNS = 10;
 const EMPTY = '#111'
 
 let GAME_SPEED = 0
-let score = 0
+let GAME_LEVEL = 0
+let linesClearedInLevel = 0
+let GAME_SCORE = 0
 let highscore = Number(gameStorage.getItem("highscore"))
 
 let GAME_OVER = false
@@ -276,11 +278,11 @@ class Piece {
                 }
 
                 if (this.y + r < 0) {
-                    if (score > highscore) {
-                        gameStorage.setItem("highscore", score.toString())
+                    if (GAME_SCORE > highscore) {
+                        gameStorage.setItem("highscore", GAME_SCORE.toString())
                         highscore = Number(gameStorage.getItem("highscore"))
                     }
-                    if (!GAME_OVER) {alert(`You got ${score} points \nYour highscore is ${highscore} points`)}
+                    if (!GAME_OVER) {alert(`You got ${GAME_SCORE} points \nYour highscore is ${highscore} points`)}
                     GAME_OVER = true
                 }
 
@@ -308,17 +310,24 @@ class Piece {
                 }
 
                 consectutiveRows++
-
-                GAME_SPEED += 5
+                linesClearedInLevel++
             }
         }
-        if (consectutiveRows === 1) {score += 40 * (Number(levelElement.textContent) + 1)}
-        if (consectutiveRows === 2) {score += 100 * (Number(levelElement.textContent) + 1)}
-        if (consectutiveRows === 3) {score += 300 * (Number(levelElement.textContent) + 1)}
-        if (consectutiveRows === 4) {score += 1200 * (Number(levelElement.textContent) + 1)}
+        if (consectutiveRows === 1) {GAME_SCORE += 40 * (GAME_LEVEL + 1)}
+        if (consectutiveRows === 2) {GAME_SCORE += 100 * (GAME_LEVEL + 1)}
+        if (consectutiveRows === 3) {GAME_SCORE += 300 * (GAME_LEVEL + 1)}
+        if (consectutiveRows === 4) {GAME_SCORE += 1200 * (GAME_LEVEL + 1)}
 
-        scoreElement.textContent = score
-        levelElement.textContent = Math.floor(GAME_SPEED / 50)
+        if (linesClearedInLevel >= 10) {
+            GAME_LEVEL++
+            GAME_SPEED += 30
+            linesClearedInLevel -= 10
+        }
+
+        console.log(linesClearedInLevel, GAME_LEVEL, GAME_SPEED)
+
+        scoreElement.textContent = GAME_SCORE
+        levelElement.textContent = GAME_LEVEL
         drawBoard()
 
         hasHolded = false
@@ -340,7 +349,7 @@ class Piece {
             this.unDraw()
             this.y++
             this.draw()
-            score += 2
+            GAME_SCORE += 2
         }
         this.lock()
         updatePieceSequence()
@@ -438,12 +447,12 @@ function generateRandomPieceSequence() {
 }
 
 const fallingPieces = () => {
-    let delay = GAME_SPEED < 975 ? 1000 - GAME_SPEED : 25
+    let delay = GAME_SPEED < 900 ? 920 - GAME_SPEED : 25
     activePiece.moveDown()
     setTimeout(fallingPieces, delay)
 }
 
-setTimeout(fallingPieces, 1000)
+setTimeout(fallingPieces, 920)
 
 document.addEventListener("keydown", control)
 
@@ -474,7 +483,7 @@ function control(event) {
         
         if (event.keyCode === 83 || event.keyCode === 40 ) {
             activePiece.moveDown()
-            score += 1
+            GAME_SCORE += 1
         }
 
         if (event.keyCode === 32) {
@@ -491,10 +500,11 @@ function control(event) {
         }
     
 function skipLevel() {
-    GAME_SPEED += 50
-    score += (40 * 10 * (Number(levelElement.textContent) + 1))
-    levelElement.textContent = Math.floor(GAME_SPEED / 50)
-    scoreElement.textContent = score
+    GAME_SPEED += 30
+    GAME_SCORE += (40 * 10 * (GAME_LEVEL + 1))
+    GAME_LEVEL++
+    levelElement.textContent = GAME_LEVEL
+    scoreElement.textContent = GAME_SCORE
 }
 
 })()
