@@ -210,6 +210,20 @@ const PIECES = [
     [J, "#0000ff", "J"],
 ]
 
+function randomizePiecesColors() {
+    const letters = "123456789ABCDEF"
+
+    for (let i = 0; i < PIECES.length; i++) {
+        let newColor = ['#']
+        for (let j = 0; j < 3; j++) {
+            newColor.push(letters[Math.floor(Math.random() * letters.length)])
+        }
+        const colorInHex = newColor.join('')
+
+        PIECES[i][1] = colorInHex
+    }
+}
+
 class Piece {
     constructor(tetromino, color) {
         this.tetromino = tetromino
@@ -322,6 +336,10 @@ class Piece {
             GAME_LEVEL++
             GAME_SPEED += 30
             linesClearedInLevel -= 10
+            
+            if (GAME_LEVEL >= 20) {
+                randomizePiecesColors()
+            }
         }
 
         scoreElement.textContent = GAME_SCORE
@@ -501,6 +519,11 @@ function skipLevel() {
     GAME_SPEED += 30
     GAME_SCORE += (40 * 10 * (GAME_LEVEL + 1))
     GAME_LEVEL++
+
+    if (GAME_LEVEL >= 20) {
+        randomizePiecesColors()
+    }
+
     levelElement.textContent = GAME_LEVEL
     scoreElement.textContent = GAME_SCORE
 }
