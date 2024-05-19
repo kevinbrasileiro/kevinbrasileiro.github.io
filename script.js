@@ -25,12 +25,6 @@ let GAME_OVER = false
 
 const I = [
 	[
-		[0, 0, 0, 0],
-		[1, 1, 1, 1],
-		[0, 0, 0, 0],
-		[0, 0, 0, 0],
-	],
-	[
 		[0, 0, 1, 0],
 		[0, 0, 1, 0],
 		[0, 0, 1, 0],
@@ -42,12 +36,6 @@ const I = [
 		[1, 1, 1, 1],
 		[0, 0, 0, 0],
 	],
-	[
-		[0, 1, 0, 0],
-		[0, 1, 0, 0],
-		[0, 1, 0, 0],
-		[0, 1, 0, 0],
-	]
 ];
 
 const J = [
@@ -107,16 +95,6 @@ const O = [
 
 const S = [
 	[
-		[0, 1, 1],
-		[1, 1, 0],
-		[0, 0, 0]
-	],
-	[
-		[0, 1, 0],
-		[0, 1, 1],
-		[0, 0, 1]
-	],
-	[
 		[0, 0, 0],
 		[0, 1, 1],
 		[1, 1, 0]
@@ -152,16 +130,6 @@ const T = [
 ];
 
 const Z = [
-	[
-		[1, 1, 0],
-		[0, 1, 1],
-		[0, 0, 0]
-	],
-	[
-		[0, 0, 1],
-		[0, 1, 1],
-		[0, 1, 0]
-	],
 	[
 		[0, 0, 0],
 		[1, 1, 0],
@@ -211,11 +179,11 @@ const PIECES = [
 ]
 
 function randomizePiecesColors() {
-    const letters = "123456789ABCDEF"
+    const letters = "23456789ABCDEF"
 
     for (let i = 0; i < PIECES.length; i++) {
         let newColor = ['#']
-        for (let j = 0; j < 3; j++) {
+        for (let j = 0; j < 6; j++) {
             newColor.push(letters[Math.floor(Math.random() * letters.length)])
         }
         const colorInHex = newColor.join('')
