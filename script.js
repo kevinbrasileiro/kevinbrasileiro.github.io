@@ -15,7 +15,7 @@ const ROWS = 20
 const COLUMNS = 10;
 const EMPTY = '#111'
 
-let GAME_SPEED = 0
+let GAME_SPEED = 150
 let GAME_LEVEL = 0
 let linesClearedInLevel = 0
 let GAME_SCORE = 0
@@ -302,7 +302,7 @@ class Piece {
 
         if (linesClearedInLevel >= 10) {
             GAME_LEVEL++
-            GAME_SPEED += 30
+            increaseGameSpeed(GAME_LEVEL)
             linesClearedInLevel -= 10
             
             if (GAME_LEVEL >= 20) {
@@ -431,12 +431,50 @@ function generateRandomPieceSequence() {
 }
 
 const fallingPieces = () => {
-    let delay = GAME_SPEED < 900 ? 920 - GAME_SPEED : 20
+    let delay = 1000 - GAME_SPEED
     activePiece.moveDown()
     setTimeout(fallingPieces, delay)
 }
 
-setTimeout(fallingPieces, 920)
+setTimeout(fallingPieces, 850)
+
+function increaseGameSpeed(level) {
+    if (level <= 8) {
+        GAME_SPEED += 75
+        return
+    }
+
+    if (level === 9) {
+        GAME_SPEED = 800
+        return
+    }
+
+    if (level === 10) {
+        GAME_SPEED = 850
+        return
+    }
+
+    if (level === 13) {
+        GAME_SPEED = 900
+        return
+    }
+
+    if (level === 16) {
+        GAME_SPEED = 925
+        return
+    }
+
+    if (level === 19) {
+        GAME_SPEED = 950
+        return
+    }
+
+    if (level === 29) {
+        GAME_SPEED = 970
+        return
+    }
+
+}
 
 document.addEventListener("keydown", control)
 
@@ -484,9 +522,10 @@ function control(event) {
         }
     
 function skipLevel() {
-    GAME_SPEED += 30
     GAME_SCORE += (40 * 10 * (GAME_LEVEL + 1))
     GAME_LEVEL++
+
+    increaseGameSpeed(GAME_LEVEL)
 
     if (GAME_LEVEL >= 20) {
         randomizePiecesColors()
