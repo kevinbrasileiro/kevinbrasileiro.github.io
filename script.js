@@ -295,21 +295,22 @@ class Piece {
                 linesClearedInLevel++
             }
         }
-        if (consectutiveRows === 1) {GAME_SCORE += 40 * (GAME_LEVEL + 1)}
-        if (consectutiveRows === 2) {GAME_SCORE += 100 * (GAME_LEVEL + 1)}
-        if (consectutiveRows === 3) {GAME_SCORE += 300 * (GAME_LEVEL + 1)}
-        if (consectutiveRows === 4) {GAME_SCORE += 1200 * (GAME_LEVEL + 1)}
 
         if (linesClearedInLevel >= 10) {
             GAME_LEVEL++
             increaseGameSpeed(GAME_LEVEL)
             linesClearedInLevel -= 10
             
-            if (GAME_LEVEL >= 20) {
+            if (GAME_LEVEL >= 19) {
                 randomizePiecesColors()
             }
         }
 
+        if (consectutiveRows === 1) {GAME_SCORE += 40 * (GAME_LEVEL + 1)}
+        if (consectutiveRows === 2) {GAME_SCORE += 100 * (GAME_LEVEL + 1)}
+        if (consectutiveRows === 3) {GAME_SCORE += 300 * (GAME_LEVEL + 1)}
+        if (consectutiveRows === 4) {GAME_SCORE += 1200 * (GAME_LEVEL + 1)}
+        
         scoreElement.textContent = GAME_SCORE
         levelElement.textContent = GAME_LEVEL
         drawBoard()
@@ -527,7 +528,7 @@ function skipLevel() {
 
     increaseGameSpeed(GAME_LEVEL)
 
-    if (GAME_LEVEL >= 20) {
+    if (GAME_LEVEL >= 19) {
         randomizePiecesColors()
     }
 
