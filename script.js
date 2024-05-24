@@ -340,9 +340,10 @@ class Piece {
         updatePieceSequence()
     }
 
-    rotate() {
+    rotateClockwise() {
         let nextPattern = this.tetromino[(this.tetrominoRotation + 1) % this.tetromino.length]
         let kick = 0
+
 
         if (this.checkCollision(0,0, nextPattern)) {
             if (this.x > COLUMNS/2) {
@@ -356,6 +357,30 @@ class Piece {
             this.unDraw()
             this.x += kick
             this.tetrominoRotation = (this.tetrominoRotation + 1) % this.tetromino.length
+            this.activeTetromino = this.tetromino[this.tetrominoRotation]
+            this.draw()
+        }
+    }
+
+    rotateCounterClockwise() {
+        let nextRotationIndex = this.tetrominoRotation === 0 ? this.tetromino.length - 1 : this.tetrominoRotation -1
+
+        let nextPattern = this.tetromino[nextRotationIndex]
+
+        let kick = 0
+
+        if (this.checkCollision(0,0, nextPattern)) {
+            if (this.x > COLUMNS/2) {
+                kick = -1
+            } else {
+                kick = 1
+            }
+        }
+
+        if (!this.checkCollision(kick, 0, nextPattern)) {
+            this.unDraw()
+            this.x += kick
+            this.tetrominoRotation =this.tetrominoRotation === 0 ? this.tetromino.length - 1 : this.tetrominoRotation -1
             this.activeTetromino = this.tetromino[this.tetrominoRotation]
             this.draw()
         }
@@ -484,27 +509,23 @@ function control(event) {
             return
         }
 
-        if (event.keyCode === 37) {
-            activePiece.moveLeft()
-        } 
-
         if (event.keyCode === 65) {
             activePiece.moveLeft()
         } 
-
-        if (event.keyCode === 39) {
-            activePiece.moveRight()
-        }  
         
         if (event.keyCode === 68) {
             activePiece.moveRight()
         }     
 
-        if (event.keyCode === 87 || event.keyCode === 38) {
-            activePiece.rotate()
+        if (event.keyCode === 69) {
+            activePiece.rotateClockwise()
+        } 
+
+        if (event.keyCode === 81) {
+            activePiece.rotateCounterClockwise()
         } 
         
-        if (event.keyCode === 83 || event.keyCode === 40 ) {
+        if (event.keyCode === 83) {
             activePiece.moveDown()
             GAME_SCORE += 1
         }
@@ -513,11 +534,11 @@ function control(event) {
             activePiece.drop()
         }
 
-        if (event.keyCode === 16 || event.keyCode === 67) {
+        if (event.keyCode === 16) {
             activePiece.hold()
         }
 
-        if (event.keyCode === 75) {
+        if (event.keyCode === 190) {
                 skipLevel()
             }
         }

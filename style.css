@@ -14,7 +14,7 @@ body {
 #canvas-wrapper {
     display: flex;
     gap: 8px;
-    padding-left: 155px;    
+    padding-left: 180px;    
     align-self: center;
 }
  
