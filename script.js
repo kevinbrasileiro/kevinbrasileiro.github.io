@@ -509,32 +509,32 @@ function control(event) {
             return
         }
 
-        if (event.keyCode === 65) {
+        if (event.keyCode === 65 || event.keyCode === 37) {
             activePiece.moveLeft()
         } 
         
-        if (event.keyCode === 68) {
+        if (event.keyCode === 68 || event.keyCode === 39) {
             activePiece.moveRight()
         }     
 
-        if (event.keyCode === 69) {
+        if (event.keyCode === 87 || event.keyCode === 88) {
             activePiece.rotateClockwise()
         } 
 
-        if (event.keyCode === 81) {
+        if (event.keyCode === 81 || event.keyCode === 90) {
             activePiece.rotateCounterClockwise()
         } 
         
-        if (event.keyCode === 83) {
+        if (event.keyCode === 83 || event.keyCode === 40) {
             activePiece.moveDown()
             GAME_SCORE += 1
         }
 
-        if (event.keyCode === 32) {
+        if (event.keyCode === 32 || event.keyCode === 38) {
             activePiece.drop()
         }
 
-        if (event.keyCode === 16) {
+        if (event.keyCode === 16 || event.keyCode === 67) {
             activePiece.hold()
         }
 
