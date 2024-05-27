@@ -17,11 +17,13 @@ const EMPTY = '#111'
 
 let GAME_SPEED = 150
 let GAME_LEVEL = 0
-let linesClearedInLevel = 0
 let GAME_SCORE = 0
 let highscore = Number(gameStorage.getItem("highscore"))
 
 let GAME_OVER = false
+
+let linesClearedInLevel = 0
+let linesNeeded = 10
 
 const I = [
 	[
@@ -150,11 +152,15 @@ function drawSquare(x, y, color) {
 }
 
 let board = []
+setupBoard()
 
-for(let r = 0; r < ROWS; r++) {
-    board[r] = []
-    for(let c = 0; c < COLUMNS; c++) {
-        board[r][c] = EMPTY
+
+function setupBoard() {
+    for(let r = 0; r < ROWS; r++) {
+        board[r] = []
+        for(let c = 0; c < COLUMNS; c++) {
+            board[r][c] = EMPTY
+        }
     }
 }
 
@@ -273,7 +279,7 @@ class Piece {
         }
 
         // Clear Rows
-        let consectutiveRows = 0;
+        let linesCleared = 0;
         for(let r = 0; r < ROWS; r++) {
             let isRowFull = true
             for(let c = 0; c < COLUMNS; c++) {
@@ -291,25 +297,27 @@ class Piece {
                     board[0][c] = EMPTY
                 }
 
-                consectutiveRows++
+                linesCleared++
                 linesClearedInLevel++
+                console.log(linesClearedInLevel, linesNeeded)
             }
         }
 
-        if (linesClearedInLevel >= 10) {
+        if (linesClearedInLevel >= linesNeeded) {
             GAME_LEVEL++
             increaseGameSpeed(GAME_LEVEL)
-            linesClearedInLevel -= 10
+            linesClearedInLevel -= linesNeeded
+            linesNeeded = 10
             
             if (GAME_LEVEL >= 19) {
                 randomizePiecesColors()
             }
         }
 
-        if (consectutiveRows === 1) {GAME_SCORE += 40 * (GAME_LEVEL + 1)}
-        if (consectutiveRows === 2) {GAME_SCORE += 100 * (GAME_LEVEL + 1)}
-        if (consectutiveRows === 3) {GAME_SCORE += 300 * (GAME_LEVEL + 1)}
-        if (consectutiveRows === 4) {GAME_SCORE += 1200 * (GAME_LEVEL + 1)}
+        if (linesCleared === 1) {GAME_SCORE += 40 * (GAME_LEVEL + 1)}
+        if (linesCleared === 2) {GAME_SCORE += 100 * (GAME_LEVEL + 1)}
+        if (linesCleared === 3) {GAME_SCORE += 300 * (GAME_LEVEL + 1)}
+        if (linesCleared === 4) {GAME_SCORE += 1200 * (GAME_LEVEL + 1)}
         
         scoreElement.textContent = GAME_SCORE
         levelElement.textContent = GAME_LEVEL
@@ -544,8 +552,12 @@ function control(event) {
         }
     
 function skipLevel() {
-    GAME_SCORE += (40 * 10 * (GAME_LEVEL + 1))
+    if (GAME_LEVEL >= 19) {
+        return
+    }
+
     GAME_LEVEL++
+    linesNeeded += 10
 
     increaseGameSpeed(GAME_LEVEL)
 
@@ -556,5 +568,4 @@ function skipLevel() {
     levelElement.textContent = GAME_LEVEL
     scoreElement.textContent = GAME_SCORE
 }
-
 })()
