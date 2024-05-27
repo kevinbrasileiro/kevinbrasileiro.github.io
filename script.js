@@ -534,12 +534,16 @@ function control(event) {
         } 
         
         if (event.keyCode === 83 || event.keyCode === 40) {
-            activePiece.moveDown()
-            GAME_SCORE += 1
+            if (activePiece.y >= -1) {
+                activePiece.moveDown()
+                GAME_SCORE += 1
+            }
         }
 
         if (event.keyCode === 32 || event.keyCode === 38) {
-            activePiece.drop()
+            if (activePiece.y >= -1) {
+                activePiece.drop()
+            }
         }
 
         if (event.keyCode === 16 || event.keyCode === 67) {
@@ -552,7 +556,7 @@ function control(event) {
         }
     
 function skipLevel() {
-    if (GAME_LEVEL >= 19) {
+    if (GAME_LEVEL >= 19 || GAME_SCORE !== 0) {
         return
     }
 
