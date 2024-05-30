@@ -15,10 +15,11 @@ const ROWS = 20
 const COLUMNS = 10;
 const EMPTY = '#111'
 
-let GAME_SPEED = 150
+let GAME_SPEED = 200
 let GAME_LEVEL = 0
 let GAME_SCORE = 0
 let highscore = Number(gameStorage.getItem("highscore"))
+let SFX_MUTED = false
 
 let GAME_OVER = false
 
@@ -270,13 +271,16 @@ class Piece {
                         gameStorage.setItem("highscore", GAME_SCORE.toString())
                         highscore = Number(gameStorage.getItem("highscore"))
                     }
-                    if (!GAME_OVER) {alert(`You got ${GAME_SCORE} points \nYour highscore is ${highscore} points`)}
+                    if (!GAME_OVER) {
+                        alert(`You got ${GAME_SCORE} points \nYour highscore is ${highscore} points`)                    
+                    }
                     GAME_OVER = true
                 }
 
                 board[this.y+r][this.x+c] = this.color
             }
         }
+        playSFX('./sfx/lockpiece.mp3', 0.05)
 
         // Clear Rows
         let linesCleared = 0;
@@ -299,17 +303,17 @@ class Piece {
 
                 linesCleared++
                 linesClearedInLevel++
-                console.log(linesClearedInLevel, linesNeeded)
             }
         }
 
         if (linesClearedInLevel >= linesNeeded) {
             GAME_LEVEL++
+            playSFX('./sfx/levelup.mp3', 0.1)
             increaseGameSpeed(GAME_LEVEL)
             linesClearedInLevel -= linesNeeded
             linesNeeded = 10
             
-            if (GAME_LEVEL >= 19) {
+            if (GAME_LEVEL >= 20) {
                 randomizePiecesColors()
             }
         }
@@ -318,6 +322,12 @@ class Piece {
         if (linesCleared === 2) {GAME_SCORE += 100 * (GAME_LEVEL + 1)}
         if (linesCleared === 3) {GAME_SCORE += 300 * (GAME_LEVEL + 1)}
         if (linesCleared === 4) {GAME_SCORE += 1200 * (GAME_LEVEL + 1)}
+
+        if (linesCleared > 0 && linesCleared < 4) {
+            playSFX("./sfx/lineclear.mp3", 0.1)
+        } else if (linesCleared === 4) {
+            playSFX("./sfx/tetrisclear.mp3", 0.1)
+        }
         
         scoreElement.textContent = GAME_SCORE
         levelElement.textContent = GAME_LEVEL
@@ -367,6 +377,7 @@ class Piece {
             this.tetrominoRotation = (this.tetrominoRotation + 1) % this.tetromino.length
             this.activeTetromino = this.tetromino[this.tetrominoRotation]
             this.draw()
+            playSFX('./sfx/move.mp3', 0.05)
         }
     }
 
@@ -391,6 +402,7 @@ class Piece {
             this.tetrominoRotation =this.tetrominoRotation === 0 ? this.tetromino.length - 1 : this.tetrominoRotation -1
             this.activeTetromino = this.tetromino[this.tetrominoRotation]
             this.draw()
+            playSFX('./sfx/move.mp3', 0.05)
         }
     }
 
@@ -399,6 +411,7 @@ class Piece {
             this.unDraw()
             this.x--
             this.draw()
+            playSFX('./sfx/move.mp3', 0.05)
         }
     }
 
@@ -407,6 +420,7 @@ class Piece {
             this.unDraw()
             this.x++
             this.draw()
+            playSFX('./sfx/move.mp3', 0.05)
         }
     }
 
@@ -470,41 +484,41 @@ const fallingPieces = () => {
     setTimeout(fallingPieces, delay)
 }
 
-setTimeout(fallingPieces, 850)
+setTimeout(fallingPieces, 800)
 
 function increaseGameSpeed(level) {
     if (level <= 8) {
-        GAME_SPEED += 75
+        GAME_SPEED += 83
         return
     }
 
     if (level === 9) {
-        GAME_SPEED = 800
-        return
-    }
-
-    if (level === 10) {
-        GAME_SPEED = 850
-        return
-    }
-
-    if (level === 13) {
         GAME_SPEED = 900
         return
     }
 
-    if (level === 16) {
-        GAME_SPEED = 925
+    if (level === 10) {
+        GAME_SPEED = 917
         return
     }
 
-    if (level === 19) {
+    if (level === 13) {
+        GAME_SPEED = 933
+        return
+    }
+
+    if (level === 16) {
         GAME_SPEED = 950
         return
     }
 
+    if (level === 19) {
+        GAME_SPEED = 967
+        return
+    }
+
     if (level === 29) {
-        GAME_SPEED = 970
+        GAME_SPEED = 975
         return
     }
 
@@ -553,7 +567,13 @@ function control(event) {
         if (event.keyCode === 190) {
                 skipLevel()
             }
+
+        if (event.keyCode === 77) {
+            SFX_MUTED = !SFX_MUTED
+            } 
         }
+
+        
     
 function skipLevel() {
     if (GAME_LEVEL >= 19 || GAME_SCORE !== 0) {
@@ -565,11 +585,19 @@ function skipLevel() {
 
     increaseGameSpeed(GAME_LEVEL)
 
-    if (GAME_LEVEL >= 19) {
+    if (GAME_LEVEL >= 20) {
         randomizePiecesColors()
     }
 
     levelElement.textContent = GAME_LEVEL
     scoreElement.textContent = GAME_SCORE
+}
+
+function playSFX(src, volume) {
+    if (!SFX_MUTED) {
+        let sfx = new Audio(src)
+        sfx.volume = volume
+        sfx.play()
+    }
 }
 })()
